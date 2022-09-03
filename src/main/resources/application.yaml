@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   application:
-    name: hmdp
+    name: minoritycomments
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/xzdp?useSSL=false&serverTimezone=UTC&characterEncoding=utf-8
@@ -24,4 +24,4 @@ mybatis-plus:
   type-aliases-package: top.fcxie.minoritycomments.entity # 别名扫描包
 logging:
   level:
-    com.hmdp: debug
+    top.fcxie: debug
