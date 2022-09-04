@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.fcxie.minoritycomments.dto.LoginFormDTO;
 import top.fcxie.minoritycomments.dto.Result;
+import top.fcxie.minoritycomments.dto.UserDTO;
 import top.fcxie.minoritycomments.service.IUserService;
+import top.fcxie.minoritycomments.utils.UserHolder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -40,6 +42,12 @@ public class UserController {
     @PostMapping("/login")
     public Result login(@RequestBody LoginFormDTO loginForm){
         return userService.login(loginForm);
+    }
+
+    @GetMapping("/me")
+    public Result me(){
+        UserDTO user = UserHolder.getUser();
+        return Result.ok(user);
     }
 
 

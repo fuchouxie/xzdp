@@ -14,4 +14,6 @@ public class RedisConstants {
     //登陆信息
     public static final String LOGIN_USER_KEY = "login:token:";
     public static final Long LOGIN_USER_TTL = 86400L;
+    //店铺类别
+    public static final String CACHE_SHOP_TYPE_KEY  = "cache:shopList";
 }
