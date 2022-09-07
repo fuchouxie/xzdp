@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 /**
  * @version V1.0
  * @author fuchouxie
- * @description: 店铺类型
+ * @description: 店铺类型实体类
  * @createDate 2022/9/4
  */
 
