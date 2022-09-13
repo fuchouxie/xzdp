@@ -8,6 +8,14 @@ import top.fcxie.minoritycomments.service.IShopTypeService;
 
 import javax.annotation.Resource;
 
+
+/**
+ * @version V1.0
+ * @author fuchouxie
+ * @description: 店铺类别控制器
+ * @createDate 2022/9/5
+ */
+
 @RestController
 @RequestMapping("/shop-type")
 public class ShopTypeController {

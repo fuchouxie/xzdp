@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * @version V1.0
  * @author fuchouxie
- * @description: 店铺业务表现层
+ * @description: 店铺业务控制器
  * @createDate 2022/9/5
  */
 
