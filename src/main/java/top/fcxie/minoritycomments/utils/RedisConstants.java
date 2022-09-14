@@ -16,4 +16,6 @@ public class RedisConstants {
     public static final Long LOGIN_USER_TTL = 86400L;
     //店铺类别
     public static final String CACHE_SHOP_TYPE_KEY  = "cache:shopList";
+    //博客点赞
+    public static final String BLOG_LIKED_KEY = "blog:liked:";
 }
