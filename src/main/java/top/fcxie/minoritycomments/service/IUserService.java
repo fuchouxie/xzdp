@@ -5,6 +5,9 @@ import top.fcxie.minoritycomments.dto.LoginFormDTO;
 import top.fcxie.minoritycomments.dto.Result;
 import top.fcxie.minoritycomments.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * @version V1.0
  * @author fuchouxie
@@ -17,4 +20,8 @@ public interface IUserService extends IService<User> {
     Result sendCode(String phone);
 
     Result login(LoginFormDTO loginForm);
+
+    Result getUser(Long userId);
+
+    Result logout(HttpServletRequest request);
 }

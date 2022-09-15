@@ -18,4 +18,6 @@ public class RedisConstants {
     public static final String CACHE_SHOP_TYPE_KEY  = "cache:shopList";
     //博客点赞
     public static final String BLOG_LIKED_KEY = "blog:liked:";
+    //用户关注
+    public static final String FOLLOW_USER_KEY = "follows:";
 }

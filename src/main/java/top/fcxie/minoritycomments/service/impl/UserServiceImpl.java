@@ -16,8 +16,11 @@ import top.fcxie.minoritycomments.service.IUserService;
 import top.fcxie.minoritycomments.utils.RedisConstants;
 import top.fcxie.minoritycomments.utils.RegexUtils;
 import top.fcxie.minoritycomments.utils.SystemConstants;
+import top.fcxie.minoritycomments.utils.UserHolder;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -91,6 +94,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         stringRedisTemplate.expire(RedisConstants.LOGIN_USER_KEY + token, RedisConstants.LOGIN_USER_TTL, TimeUnit.SECONDS);
         //7.返回登陆凭证
         return Result.ok(token);
+    }
+
+    @Override
+    public Result getUser(Long userId) {
+        //1.查询用户信息
+        User user = getById(userId);
+        //2.封装简要信息
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        //3.返回
+        return Result.ok(userDTO);
+    }
+
+    @Override
+    public Result logout(HttpServletRequest request) {
+        //1.拿到请求头中authorization字段的token
+        String token = request.getHeader("authorization");
+        //2.清空登陆状态
+        String key = RedisConstants.LOGIN_USER_KEY + token;
+        stringRedisTemplate.delete(key);
+        //3.返回结果
+        return Result.ok();
     }
 
     private User createUserWithPhone(String phone) {
