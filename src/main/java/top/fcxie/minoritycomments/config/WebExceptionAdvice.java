@@ -14,4 +14,6 @@ public class WebExceptionAdvice {
         log.error(e.toString(), e);
         return Result.fail("服务器异常");
     }
+
+
 }
