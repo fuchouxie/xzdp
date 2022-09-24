@@ -39,8 +39,13 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     @Resource
     private RedissonClient redissonClient;
 
+
+    /**
+     * 优惠券秒杀
+     * @param voucherId
+     * @return
+     */
     @Override
-    @Transactional
     public Result seckillVoucher(Long voucherId) {
         //1.查询优惠券
         SeckillVoucher voucher = seckillVoucherService.getById(voucherId);
@@ -58,7 +63,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         if(voucher.getStock() < 1){
             return Result.fail("库存不足");
         }
-        //4.使用redis作分布式锁进行互斥
+        //4.使用redis作分布式锁进行互斥(保险1)
         Long userId = UserHolder.getUser().getId();
         //4.1 尝试获取锁
         RLock lock = redissonClient.getLock("order" + userId);
@@ -78,7 +83,6 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
          * 我们的事务是交由Spring去实现的，Spring采用AOP来实现事务功能，其底层采用动态代理模式，为我们的创建订单方法进行了增强，
          * 因此如果我们只是通过调用当前对象的创建订单此时就会出现经典的事务失效问题。
          * 3、解决事务失效问题的核心就是拿到代理对象，通过代理对象来执行生成秒杀订单逻辑。
-         *
          */
         try {
             //5.1 获取带有事务的代理对象
@@ -107,7 +111,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
             return Result.fail("你已拥有该优惠券了哦");
         }
 
-        //5.CAS扣减库存
+        //5.CAS扣减库存(保险2)
         boolean success = seckillVoucherService.update()
                 .setSql("stock = stock - 1")
                 .eq("voucher_id", voucherId)
@@ -132,7 +136,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     }
 
     /**
-     * 模拟存在超卖问题的秒杀
+     * 模拟存在一人多单的秒杀
      * @param voucherId
      * @return
      */
@@ -159,7 +163,6 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         boolean success = seckillVoucherService.update()
                 .setSql("stock = stock - 1")
                 .eq("voucher_id", voucherId)
-                .gt("stock", 0)
                 .update();
         if (!success) {
             return Result.fail("库存不足！");
@@ -179,7 +182,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     }
 
     /**
-     * 模拟存在一人多单的秒杀
+     * 模拟存在超卖问题的秒杀
      * @param voucherId
      * @return
      */
@@ -203,10 +206,11 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         }
         //4.确保一人一单
         Long userId = UserHolder.getUser().getId();
-        int count = query().eq("user_id", userId)
+        int count = query()
+                .eq("user_id", userId)
                 .eq("voucher_id", voucherId)
                 .count();
-        if(count > 0){
+        if (count > 0) {
             return Result.fail("你已拥有该优惠券了哦");
         }
         //5.扣减库存

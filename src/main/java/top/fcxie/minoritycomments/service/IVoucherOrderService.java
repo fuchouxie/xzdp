@@ -14,5 +14,9 @@ import top.fcxie.minoritycomments.entity.VoucherOrder;
 public interface IVoucherOrderService extends IService<VoucherOrder> {
     Result seckillVoucher(Long voucherId);
 
+    Result seckillVoucher1(Long voucherId);
+
+    Result seckillVoucher2(Long voucherId);
+
     Result createVoucherOrder(Long voucherId);
 }
